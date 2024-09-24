@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
 TFLITE_MODEL_PATH = './mobilenet_cats_laptops_quantized.tflite'  # Path to the quantized TFLite model
-TEST_DIR = './Dataset/Laptop'  # Update with your test images directory
-
+#TEST_DIR = './Dataset/Test/chair'  # Update with your test images directory
+TEST_DIR ='./temp'
 # Load the TFLite model and allocate tensors
 interpreter = tf.lite.Interpreter(model_path=TFLITE_MODEL_PATH)
 interpreter.allocate_tensors()
@@ -35,9 +35,13 @@ def load_and_predict(img_path):
     return output_data
 
 # Get class labels from the training generator
+# Labels follow same order as the class names alphabetically
 class_indices = {
     "cat": 0,
-    "laptop": 1
+    "chair": 1,
+    "dog": 2,
+    "laptop": 3,
+    "person": 4
 }
 class_labels = list(class_indices.keys())
 
@@ -52,10 +56,11 @@ for img_name in test_images:
     # Get the predicted class index and label
     predicted_index = np.argmax(predictions[0])
     predicted_label = class_labels[predicted_index]
+    predicted_confidence = predictions[0][predicted_index]
 
     # Display the image and the prediction
     img = image.load_img(img_path)
     plt.imshow(img)
-    plt.title(f'Predicted: {predicted_label}')
+    plt.title(f'Predicted: {predicted_label}, confidence: {predicted_confidence:.2f}')
     plt.axis('off')
     plt.show()

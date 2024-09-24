@@ -8,9 +8,9 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
 BATCH_SIZE = 32
-EPOCHS = 3
-NUM_CLASSES = 2
-TRAIN_DIR = 'Dataset'
+EPOCHS = 10
+NUM_CLASSES = 5
+TRAIN_DIR = 'Dataset/Train'
 
 # Data generators for training and validation
 train_datagen = ImageDataGenerator(rescale=1.0/255.0, validation_split=0.2)
@@ -59,7 +59,7 @@ converter.optimizations = [tf.lite.Optimize.DEFAULT]
 
 # Provide representative dataset for quantization
 def representative_data_gen():
-    for i in range(3):
+    for i in range(10):
         x, _ = next(train_generator) 
         yield [x]
         print(i)
