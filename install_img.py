@@ -9,7 +9,7 @@ def download_image(im):
     """Downloads the image from the COCO dataset"""
     try:
         img_data = requests.get(im['coco_url'],timeout=10).content
-        with open('./Dataset/coco_person/' + im['file_name'], 'wb') as handler:
+        with open('./Dataset/Laptop/' + im['file_name'], 'wb') as handler:
             handler.write(img_data)
     except Exception as e:
         print(f"Error downloading {im}: {e}")
@@ -29,9 +29,9 @@ def download_coco_images(labels):
     print(f"Number of images: {len(images)}")
     #the first image in the list
     # Save the images into a local folder
-    images = images[0:10]
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    images = images[0:100]
+    with ThreadPoolExecutor(max_workers=10) as executor:
         list(tqdm(executor.map(download_image, images), total=len(images), desc="Downloading Images"))
 
 if __name__ == "__main__":
-    download_coco_images(labels=['person'])
+    download_coco_images(labels=['laptop'])
