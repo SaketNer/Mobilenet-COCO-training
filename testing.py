@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
-TFLITE_MODEL_PATH = './mobilenet_cats_laptops_quantized.tflite'  # Path to the quantized TFLite model
-#TEST_DIR = './Dataset/Test/chair'  # Update with your test images directory
-TEST_DIR ='./temp'
+TFLITE_MODEL_PATH = './model.tflite'  # Path to the quantized TFLite model
+TEST_DIR = './Dataset/Test/laptop'
+
 # Load the TFLite model and allocate tensors
 interpreter = tf.lite.Interpreter(model_path=TFLITE_MODEL_PATH)
 interpreter.allocate_tensors()
@@ -22,10 +22,13 @@ def load_and_predict(img_path):
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
-    img_array = img_array / 255.0  # Rescale to [0, 1]
+
+    # Scale the image to [0, 255] and convert to uint8
+    img_array = np.clip(img_array, 0, 255)  # Ensure values are in the correct range
+    img_array = img_array.astype(np.uint8)   # Convert to uint8
 
     # Set the tensor to the input
-    interpreter.set_tensor(input_details[0]['index'], img_array.astype(np.float32))
+    interpreter.set_tensor(input_details[0]['index'], img_array)
 
     # Invoke the interpreter
     interpreter.invoke()
@@ -35,13 +38,14 @@ def load_and_predict(img_path):
     return output_data
 
 # Get class labels from the training generator
-# Labels follow same order as the class names alphabetically
 class_indices = {
-    "cat": 0,
-    "chair": 1,
-    "dog": 2,
-    "laptop": 3,
-    "person": 4
+    "bottle": 0,
+    "car": 1,
+    "cat": 2,
+    "chair": 3,
+    "dog": 4,
+    "laptop": 5,
+    "person": 6
 }
 class_labels = list(class_indices.keys())
 
@@ -53,10 +57,14 @@ for img_name in test_images:
     img_path = os.path.join(TEST_DIR, img_name)
     predictions = load_and_predict(img_path)
 
-    # Get the predicted class index and label
-    predicted_index = np.argmax(predictions[0])
+    # Normalize the output if needed (softmax expected)
+    predictions = predictions[0]  # Get the predictions for the batch
+
+    # If the model uses softmax, it should already be normalized
+    # Ensure the values are probabilities
+    predicted_index = np.argmax(predictions)
     predicted_label = class_labels[predicted_index]
-    predicted_confidence = predictions[0][predicted_index]
+    predicted_confidence = predictions[predicted_index]  # Get confidence for the predicted class
 
     # Display the image and the prediction
     img = image.load_img(img_path)

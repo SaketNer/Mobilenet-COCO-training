@@ -11,8 +11,8 @@ To do:
 Add a function to convert the image to 240x240 before saving it
 """
 
-TOTAL_IMAGES = 400
-TESTING_PERCENTAGE = 0.2
+TOTAL_IMAGES = 1500
+TESTING_PERCENTAGE = 0.1
 TRAINING_DIRECTORTY = './Dataset/Train'
 TESTING_DIRECTORY = './Dataset/Test'
 
@@ -26,7 +26,7 @@ coco = COCO('./annotations/instances_train2017.json')
 def download_image(folder ,im):
     """Downloads the image from the COCO dataset"""
     if os.path.exists(folder + im['file_name']):
-        print(f"File {folder + im['file_name']} already exists. Skipping download.")
+        #print(f"File {folder + im['file_name']} already exists. Skipping download.")
         return
     try:
         img_data = requests.get(im['coco_url'],timeout=10).content
@@ -64,9 +64,11 @@ def download_coco_images(label):
         list(tqdm(executor.map(lambda im: download_image(label_test_directory, im), testing_images), total=len(testing_images), desc="Downloading Testing Images"))
 
 def downloder(labels):
-    for label in labels:
-        print(f"Downloading images for {label}")
-        download_coco_images([label])
+    # for label in labels:
+    #     print(f"Downloading images for {label}")
+    with ThreadPoolExecutor(max_workers=3) as executor:   
+        list(tqdm(executor.map(lambda label: download_coco_images([label]), labels), total=len(labels), desc="Labels Completed", position=0))
+
 
 if __name__ == "__main__":
-    downloder(labels=['laptop','cat','dog','person','chair'])
+    downloder(labels=['laptop','cat','dog','person','chair','bottle','car'])
