@@ -1,0 +1,5 @@
+[MASTER]
+ignore-patterns=tensorflow
+
+[MESSAGES CONTROL]
+disable=import-error, no-name-in-module
