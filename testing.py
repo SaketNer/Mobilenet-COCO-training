@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
-TFLITE_MODEL_PATH = './model.tflite'  # Path to the quantized TFLite model
-TEST_DIR = './Dataset/Test/laptop'
+TFLITE_MODEL_PATH = "./modelV3.tflite"  # Path to the quantized TFLite model
+TEST_DIR = "./temp"
 
 # Load the TFLite model and allocate tensors
 interpreter = tf.lite.Interpreter(model_path=TFLITE_MODEL_PATH)
@@ -17,6 +17,7 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
+
 # Function to preprocess and predict on a single image
 def load_and_predict(img_path):
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
@@ -25,17 +26,19 @@ def load_and_predict(img_path):
 
     # Scale the image to [0, 255] and convert to uint8
     img_array = np.clip(img_array, 0, 255)  # Ensure values are in the correct range
-    img_array = img_array.astype(np.uint8)   # Convert to uint8
+    img_array = img_array.astype(np.uint8)  # Convert to uint8
+    
 
     # Set the tensor to the input
-    interpreter.set_tensor(input_details[0]['index'], img_array)
+    interpreter.set_tensor(input_details[0]["index"], img_array)
 
     # Invoke the interpreter
     interpreter.invoke()
 
     # Get the output tensor
-    output_data = interpreter.get_tensor(output_details[0]['index'])
+    output_data = interpreter.get_tensor(output_details[0]["index"])
     return output_data
+
 
 # Get class labels from the training generator
 class_indices = {
@@ -45,7 +48,7 @@ class_indices = {
     "chair": 3,
     "dog": 4,
     "laptop": 5,
-    "person": 6
+    "person": 6,
 }
 class_labels = list(class_indices.keys())
 
@@ -64,11 +67,13 @@ for img_name in test_images:
     # Ensure the values are probabilities
     predicted_index = np.argmax(predictions)
     predicted_label = class_labels[predicted_index]
-    predicted_confidence = predictions[predicted_index]  # Get confidence for the predicted class
+    predicted_confidence = predictions[
+        predicted_index
+    ]  # Get confidence for the predicted class
 
     # Display the image and the prediction
     img = image.load_img(img_path)
     plt.imshow(img)
-    plt.title(f'Predicted: {predicted_label}, confidence: {predicted_confidence:.2f}')
-    plt.axis('off')
+    plt.title(f"Predicted: {predicted_label}, confidence: {predicted_confidence:.2f}")
+    plt.axis("off")
     plt.show()
