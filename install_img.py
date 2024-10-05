@@ -11,8 +11,8 @@ To do:
 Add a function to convert the image to 240x240 before saving it
 """
 
-TOTAL_IMAGES = 1500
-TESTING_PERCENTAGE = 0.1
+TOTAL_IMAGES = 3000
+TESTING_PERCENTAGE = 0.05
 TRAINING_DIRECTORTY = "./Dataset/Train"
 TESTING_DIRECTORY = "./Dataset/Test"
 
@@ -96,4 +96,4 @@ def downloder(labels):
 
 
 if __name__ == "__main__":
-    downloder(labels=["laptop", "person", "car"])
+    downloder(labels=["laptop", "person", "car","chair"])
