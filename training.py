@@ -67,6 +67,8 @@ model.fit(
 # Save the model before quantization
 model.save("./model.keras")
 
+
+
 # Quantization to INT8
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
