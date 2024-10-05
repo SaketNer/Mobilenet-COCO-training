@@ -8,7 +8,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
 BATCH_SIZE = 64
-EPOCHS = 10
+EPOCHS = 20
 NUM_CLASSES = 7
 TRAIN_DIR = "Dataset/Train"
 

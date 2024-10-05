@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import os
 import matplotlib.pyplot as plt
+import convert888to565 as c565
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
@@ -18,8 +19,11 @@ input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
 
+
+
 # Function to preprocess and predict on a single image
 def load_and_predict(img_path):
+    print(img_path)
     img = image.load_img(img_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
@@ -27,8 +31,10 @@ def load_and_predict(img_path):
     # Scale the image to [0, 255] and convert to uint8
     img_array = np.clip(img_array, 0, 255)  # Ensure values are in the correct range
     img_array = img_array.astype(np.uint8)  # Convert to uint8
-    
-
+    print(img_array.shape)
+    #img_array = c565.rgb888_to_rgb565(img_array)
+    #img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension back
+    print(img_array.shape)
     # Set the tensor to the input
     interpreter.set_tensor(input_details[0]["index"], img_array)
 
@@ -57,12 +63,15 @@ test_images = os.listdir(TEST_DIR)
 
 # Iterate over test images and make predictions
 for img_name in test_images:
+    if not img_name.lower().endswith(('.png', '.jpeg')):
+        print("not running on ", img_name)
+        continue
     img_path = os.path.join(TEST_DIR, img_name)
     predictions = load_and_predict(img_path)
 
     # Normalize the output if needed (softmax expected)
     predictions = predictions[0]  # Get the predictions for the batch
-
+    print(predictions)
     # If the model uses softmax, it should already be normalized
     # Ensure the values are probabilities
     predicted_index = np.argmax(predictions)

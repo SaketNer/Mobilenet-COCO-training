@@ -96,4 +96,4 @@ def downloder(labels):
 
 
 if __name__ == "__main__":
-    downloder(labels=["laptop", "cat", "dog", "person", "chair", "bottle", "car"])
+    downloder(labels=["laptop", "person", "car"])
