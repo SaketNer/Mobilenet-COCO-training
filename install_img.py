@@ -3,6 +3,7 @@ import requests
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 import os
+import time
 
 # download annotations from https://cocodataset.org/#download
 
@@ -11,7 +12,9 @@ To do:
 Add a function to convert the image to 240x240 before saving it
 """
 
-TOTAL_IMAGES = 3000
+
+
+TOTAL_IMAGES = 5000
 TESTING_PERCENTAGE = 0.05
 TRAINING_DIRECTORTY = "./Dataset/Train"
 TESTING_DIRECTORY = "./Dataset/Test"
@@ -22,16 +25,24 @@ os.makedirs(TESTING_DIRECTORY, exist_ok=True)
 
 coco = COCO("./annotations/instances_train2017.json")
 
+download_image_set = set()
+
 
 def download_image(folder, im):
     """Downloads the image from the COCO dataset"""
-    if os.path.exists(folder + im["file_name"]):
-        # print(f"File {folder + im['file_name']} already exists. Skipping download.")
+    global download_image_set
+    if im["file_name"] in download_image_set:
         return
+    download_image_set.add(im["file_name"])
+    if os.path.exists(folder + im["file_name"]) :
+        # print(f"File {folder + im['file_name']} already exists or already downloaded. Skipping download.")
+        return
+    
     try:
         img_data = requests.get(im["coco_url"], timeout=10).content
         with open(folder + im["file_name"], "wb") as handler:
             handler.write(img_data)
+            
     except Exception as e:
         print(f"Error downloading {im}: {e}")
 
@@ -45,7 +56,10 @@ def download_coco_images(label):
 
     # Get the corresponding image ids and images using loadImgs
     imgIds = coco.getImgIds(catIds=catIds)
+    
+    
     images = coco.loadImgs(imgIds)
+
     print(f"Number of images: {len(images)}")
     # the first image in the list
     # Save the images into a local folder
@@ -96,4 +110,9 @@ def downloder(labels):
 
 
 if __name__ == "__main__":
-    downloder(labels=["laptop", "person", "car","chair"])
+    #downloder(labels=["laptop", "person", "car","chair"])
+    # List all available labels in COCO dataset
+    cats = coco.loadCats(coco.getCatIds())
+    labels = [cat['name'] for cat in cats]
+    print("Available labels in COCO dataset:", labels)
+    downloder(labels=["car","chair","person","skateboard","tennis racket"])
