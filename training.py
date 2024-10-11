@@ -10,7 +10,7 @@ IMG_HEIGHT, IMG_WIDTH = 240, 240
 BATCH_SIZE = 256
 EPOCHS = 10
 NUM_CLASSES = 5
-TRAIN_DIR = "Dataset/Train"
+TRAIN_DIR = "Dataset/Augment"
 
 # Data generators for training and validation
 train_datagen = ImageDataGenerator(validation_split=0.2)
