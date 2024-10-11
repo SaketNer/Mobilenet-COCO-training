@@ -7,9 +7,9 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
-BATCH_SIZE = 128
+BATCH_SIZE = 1024
 EPOCHS = 10
-NUM_CLASSES = 4
+NUM_CLASSES = 7
 TRAIN_DIR = "Dataset/Train"
 
 # Data generators for training and validation
@@ -37,7 +37,7 @@ base_model = MobileNetV3Small(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), include_to
 # base_model = MobileNet(
 #     input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), include_top=False, weights="imagenet"
 # )
-base_model.trainable = False  # Freeze the base model
+base_model.trainable = 1  # Freeze the base model
 
 # Add custom layers on top
 x = base_model.output

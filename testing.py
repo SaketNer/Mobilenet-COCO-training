@@ -48,10 +48,10 @@ def load_and_predict(img_path):
 
 # Get class labels from the training generator
 class_indices = {
-    "car": 0,
+    "apple": 0,
     "chair": 1,
-    "laptop": 2,
-    "person": 3,
+    "person": 2,
+    "potted plant": 3,
 }
 # class_indices = {
 #     "bottle": 0,

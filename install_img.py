@@ -3,7 +3,6 @@ import requests
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 import os
-import time
 
 # download annotations from https://cocodataset.org/#download
 
@@ -56,10 +55,7 @@ def download_coco_images(label):
 
     # Get the corresponding image ids and images using loadImgs
     imgIds = coco.getImgIds(catIds=catIds)
-    
-    
     images = coco.loadImgs(imgIds)
-
     print(f"Number of images: {len(images)}")
     # the first image in the list
     # Save the images into a local folder
