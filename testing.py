@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import os
 import matplotlib.pyplot as plt
-import convert888to565 as c565
+import helper_codes.convert888to565 as c565
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240

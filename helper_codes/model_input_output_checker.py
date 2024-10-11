@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 # Load the TFLite model
-tflite_model_path = "./model.tflite"  # Replace with your model path
+tflite_model_path = "./Models/model.tflite"  # Replace with your model path
 interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
 
 # Allocate tensors

@@ -13,7 +13,7 @@ Add a function to convert the image to 240x240 before saving it
 
 
 
-TOTAL_IMAGES = 5000
+TOTAL_IMAGES = 1000
 TESTING_PERCENTAGE = 0.05
 TRAINING_DIRECTORTY = "./Dataset/Train"
 TESTING_DIRECTORY = "./Dataset/Test"

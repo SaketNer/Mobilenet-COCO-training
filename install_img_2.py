@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 import os
 
-MAX_IMAGES_PER_LABEL = 300
+MAX_IMAGES_PER_LABEL = 900
 TESTING_PERCENTAGE = 0.05
 TRAINING_DIRECTORTY = "./Dataset/Train"
 TESTING_DIRECTORY = "./Dataset/Test"
@@ -67,7 +67,7 @@ def download_coco_images(labels, label_id_set, ignore_labels):
         label_img_cnt = 0
         label_img_data = images = coco.loadImgs(label_ids)
         print("\nStarting lable :", labels[i], " with size: ", len(label_img_data), "\n")
-        for id in label_img_data:
+        for id in tqdm(label_img_data):
             try:
                 download_image(labels[i], id)
                 label_img_cnt+=1
@@ -85,7 +85,25 @@ if __name__ == "__main__":
     cats = coco.loadCats(coco.getCatIds())
     all_labels = [cat['name'] for cat in cats]
     print("Available labels in COCO dataset:", all_labels)
-    download_labels=["apple","car","potted plant","chair","person","skateboard","tennis racket","handbag"]
-    ignore_labels = ["potted plant","chair","person"]
+    download_labels=["apple","car","potted plant","chair","person","dog","cat"]
+    ignore_labels = ["dog","cat"]
     label_id_set = unique_id_per_class(download_labels)
+    # Split the labels and label_id_set into three parts
+    split_index_1 = len(download_labels) // 3
+    split_index_2 = 2 * len(download_labels) // 3
+
+    labels_part1 = download_labels[:split_index_1]
+    labels_part2 = download_labels[split_index_1:split_index_2]
+    labels_part3 = download_labels[split_index_2:]
+
+    label_id_set_part1 = label_id_set[:split_index_1]
+    label_id_set_part2 = label_id_set[split_index_1:split_index_2]
+    label_id_set_part3 = label_id_set[split_index_2:]
+
+    # Create a thread pool and download images in parallel
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        executor.submit(download_coco_images, labels_part1, label_id_set_part1, ignore_labels)
+        executor.submit(download_coco_images, labels_part2, label_id_set_part2, ignore_labels)
+        executor.submit(download_coco_images, labels_part3, label_id_set_part3, ignore_labels)
     download_coco_images(download_labels, label_id_set, ignore_labels)
+    

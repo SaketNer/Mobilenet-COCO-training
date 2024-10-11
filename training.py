@@ -7,9 +7,9 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
-BATCH_SIZE = 1024
+BATCH_SIZE = 256
 EPOCHS = 10
-NUM_CLASSES = 7
+NUM_CLASSES = 5
 TRAIN_DIR = "Dataset/Train"
 
 # Data generators for training and validation
@@ -55,17 +55,18 @@ model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accur
 
 # Train the model
 checkpoint = ModelCheckpoint(
-    "./mobilenetv3.keras", monitor="val_accuracy", save_best_only=True
+    "./Models/mobilenetv3.keras", monitor="val_accuracy", save_best_only=True
 )
 model.fit(
     train_generator,
     validation_data=validation_generator,
     epochs=EPOCHS,
     callbacks=[checkpoint],
+    shuffle=True,
 )
 
 # Save the model before quantization
-model.save("./model.keras")
+model.save("./Models//modelV3.keras")
 
 
 
@@ -89,7 +90,7 @@ converter.inference_output_type = tf.uint8
 tflite_model = converter.convert()
 
 # Save the quantized model
-with open("modelV3.tflite", "wb") as f:
+with open("./Models/modelV3.tflite", "wb") as f:
     f.write(tflite_model)
 
 print("Training complete and quantized model saved.")
