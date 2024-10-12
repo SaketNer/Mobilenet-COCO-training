@@ -1,3 +1,9 @@
+"""
+Trains a MobileNetV3 model on the dataset and saves the model in .tflite format.
+It converts the model to a int8 quantized model.
+"""
+
+
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNet, MobileNetV3Small

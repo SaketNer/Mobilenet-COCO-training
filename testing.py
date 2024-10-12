@@ -1,3 +1,8 @@
+"""
+Tests the model on a given folder images and shows its predictions.
+"""
+
+
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image

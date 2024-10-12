@@ -1,3 +1,9 @@
+"""
+Given a 240x240x3 image byte array from esp32, this will convert it to an img file.
+This was done as i did not have web server set up on the esp32 so I told it to 
+print the bytes of the image and then I copied it here to convert it to an image.
+"""
+
 import numpy as np
 from PIL import Image
 

@@ -1,3 +1,10 @@
+"""
+Script to download images from the COCO dataset based on the labels provided.
+The script will download images from the given labels such that the image has an object of that label 
+no other label object is present in the image. The script will download a maximum of 900 images per label.
+"""
+
+
 from pycocotools.coco import COCO
 import requests
 from concurrent.futures import ThreadPoolExecutor
