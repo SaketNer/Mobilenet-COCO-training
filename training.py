@@ -4,12 +4,13 @@ from tensorflow.keras.applications import MobileNet, MobileNetV3Small
 from tensorflow.keras.layers import Conv2D, GlobalAveragePooling2D, Reshape
 from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import ModelCheckpoint
+import os
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
 BATCH_SIZE = 256
-EPOCHS = 10
-NUM_CLASSES = 5
+EPOCHS = 15
+NUM_CLASSES = 4
 TRAIN_DIR = "Dataset/Augment"
 
 # Data generators for training and validation
@@ -33,11 +34,11 @@ validation_generator = train_datagen.flow_from_directory(
 )
 
 # Build the MobileNet model
-base_model = MobileNetV3Small(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), include_top=False, weights='imagenet',minimalistic=True, dropout_rate=0.2,)
+base_model = MobileNetV3Small(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), include_top=False, weights='imagenet',minimalistic=True, dropout_rate=0.3,)
 # base_model = MobileNet(
 #     input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), include_top=False, weights="imagenet"
 # )
-base_model.trainable = 1  # Freeze the base model
+base_model.trainable = False  # Freeze the base model
 
 # Add custom layers on top
 x = base_model.output
@@ -92,5 +93,7 @@ tflite_model = converter.convert()
 # Save the quantized model
 with open("./Models/modelV3.tflite", "wb") as f:
     f.write(tflite_model)
+
+os.system("xxd -i ./Models/modelV3.tflite > modelV3.cc")
 
 print("Training complete and quantized model saved.")

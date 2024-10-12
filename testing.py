@@ -7,7 +7,7 @@ import helper_codes.convert888to565 as c565
 
 # Constants
 IMG_HEIGHT, IMG_WIDTH = 240, 240
-TFLITE_MODEL_PATH = "./modelV3.tflite"  # Path to the quantized TFLite model
+TFLITE_MODEL_PATH = "./Models/modelV3.tflite"  # Path to the quantized TFLite model
 TEST_DIR = "./temp"
 
 # Load the TFLite model and allocate tensors
