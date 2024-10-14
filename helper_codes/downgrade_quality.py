@@ -1,5 +1,6 @@
 import os
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageEnhance, ImageOps, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 import random
 
 
@@ -9,7 +10,10 @@ def reduce_brightness(image_path, output_path, factor=0.5):
     image_brightness = random.uniform(0.5, 1)
 
     image = Image.open(image_path)
-    
+    print("image dimensions: ", image.size)
+    if(image.size == (240,240)):
+        image.save(output_path)
+        return
     resized_img = ImageOps.fit(image, (240, 240), method=Image.Resampling.LANCZOS)
     enhancer = ImageEnhance.Brightness(resized_img)
     

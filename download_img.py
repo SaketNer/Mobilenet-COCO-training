@@ -10,8 +10,9 @@ import requests
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 import os
+import time
 
-MAX_IMAGES_PER_LABEL = 900
+MAX_IMAGES_PER_LABEL = 200
 TESTING_PERCENTAGE = 0.05
 TRAINING_DIRECTORTY = "./Dataset/Train"
 TESTING_DIRECTORY = "./Dataset/Test"
@@ -92,8 +93,8 @@ if __name__ == "__main__":
     cats = coco.loadCats(coco.getCatIds())
     all_labels = [cat['name'] for cat in cats]
     print("Available labels in COCO dataset:", all_labels)
-    download_labels=["apple","car","potted plant","chair","person","dog","cat"]
-    ignore_labels = ["dog","cat"]
+    download_labels=["bottle","person","laptop","potted plant"]
+    ignore_labels = []
     label_id_set = unique_id_per_class(download_labels)
     # Split the labels and label_id_set into three parts
     split_index_1 = len(download_labels) // 3
