@@ -58,15 +58,7 @@ class_indices = {
     "person": 2,
     "plant": 3,
 }
-# class_indices = {
-#     "bottle": 0,
-#     "car": 1,
-#     "cat": 2,
-#     "chair": 3,
-#     "dog": 4,
-#     "laptop": 5,
-#     "person": 6,
-# }
+
 class_labels = list(class_indices.keys())
 
 # Test images
