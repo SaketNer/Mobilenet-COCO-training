@@ -2,3 +2,4 @@ pycocotools
 tensorflow
 requests
 tqdm
+keyboard
